@@ -23,7 +23,26 @@ variable "system_node_count" {
   description = "Number of AKS worker nodes"
 }
 
+variable "system_node_size" {
+  type        = string
+  description = "Size of each AKS worker node"
+}
+
 variable "node_resource_group" {
   type        = string
   description = "RG name for cluster resources in Azure"
 }
+
+variable "tag_billing_team" {
+  type        = string
+  description = "Tag to identify the billing team"
+}
+
+variable "tag_env" {
+  type        = string
+  description = "Tag to identify the environment"
+}
+
+/*variable "ssh_public_key" {
+  default = "~/.ssh/id_rsa.pub"
+}*/

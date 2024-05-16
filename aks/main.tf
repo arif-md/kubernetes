@@ -14,12 +14,17 @@ resource "azurerm_kubernetes_cluster" "aks" {
   default_node_pool {
     name       = "system"
     node_count = var.system_node_count
-    vm_size    = "Standard_DS2_v2"
+    vm_size    = var.system_node_size
     type       = "VirtualMachineScaleSets"
     # availability_zones  = [1, 2, 3]
     enable_auto_scaling = false
   }
-
+  /*linux_profile {
+    admin_username = "ubuntu"
+    ssh_key {
+      key_data = file(var.ssh_public_key)
+    }
+  }*/
   identity {
     type = "SystemAssigned"
   }
@@ -28,4 +33,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
     load_balancer_sku = "standard"
     network_plugin    = "kubenet" # azure (CNI)
   }
+
+  tags = {
+    Billing = var.tag_billing_team
+    Environment = var.tag_env
+  }  
 }

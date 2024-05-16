@@ -30,6 +30,10 @@ terraform apply tfplan
 # delete the infra
 terraform destroy
 
+# debugging
+kubectl get nodes
+kubectl debug node/<node name from above command output> -it --image=<image name of the node, example ubuntu>
+
 # cleanup files
 rm terraform.tfstate
 rm terraform.tfstate.backup
