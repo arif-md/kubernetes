@@ -33,6 +33,16 @@ variable "node_resource_group" {
   description = "RG name for cluster resources in Azure"
 }
 
+variable "acr_name" {
+  type        = string
+  description = "Name of the ACR"
+}
+
+/*variable "acr_geo_replicaton_location_1" {
+  type        = string
+  description = "Geo replication location - 1"
+}*/
+
 variable "tag_billing_team" {
   type        = string
   description = "Tag to identify the billing team"

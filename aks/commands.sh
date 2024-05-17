@@ -27,12 +27,17 @@ cat tfplan.json | jq '[.resource_changes[] | {type: .type, name: .change.after.n
 # apply the infra changes
 terraform apply tfplan
 
-# delete the infra
-terraform destroy
+# Move the received credentials to kubectl home dir so that we can connect to cluster.
+# First take the backup of existing file.
+mv ~/.kube/config/kubeconfig ~/.kube/config/kubeconfig_<date>
+mv kubeconfig ~/.kube/config
 
 # debugging
 kubectl get nodes
 kubectl debug node/<node name from above command output> -it --image=<image name of the node, example ubuntu>
+
+# delete the infra
+terraform destroy --auto-approve
 
 # cleanup files
 rm terraform.tfstate
