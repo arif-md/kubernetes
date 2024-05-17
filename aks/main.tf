@@ -1,13 +1,36 @@
-resource "azurerm_resource_group" "rg" {
-  name     = var.resource_group_name
-  location = var.location
+module "resource_groups_jenkins" {
+  source = "../../azure/terraforms/modules/resource_group"
+  name     = var.jenkins_rg_name 
+  location = var.jenkins_vm_location
+}
+
+module "virtual_networks_jenkins" {
+  source = "../../azure/terraforms/modules/virtual_network"
+  prefix   = var.jenkins_rg_name
+  location = var.jenkins_vm_location
+  rsg      = module.resource_groups_jenkins.rsg
+}
+
+module "virtual_machine_jenkins" {
+  source = "../../azure/terraforms/modules/virtual_machine"
+  location        = var.jenkins_vm_location
+  rsg             = module.resource_groups_jenkins.rsg
+  subnet_internal = module.virtual_networks_jenkins.subnet_internal
+  vm_size         = var.jenkins_vm_size
+  prefix          = var.jenkins_rg_name  
+}
+
+module "resource_groups_aks" {
+  source = "../../azure/terraforms/modules/resource_group"
+  name     = var.aks_rg_name 
+  location = var.aks_location
 }
 
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = var.cluster_name
   kubernetes_version  = var.kubernetes_version
-  location            = var.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = var.aks_location
+  resource_group_name = module.resource_groups_aks.rsg.name
   dns_prefix          = var.cluster_name
   node_resource_group = var.node_resource_group
 
@@ -42,8 +65,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
 resource "azurerm_container_registry" "aks" {
   name                = var.acr_name
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  resource_group_name = module.resource_groups_aks.rsg.name
+  location            = module.resource_groups_aks.rsg.location
   sku                 = "Standard" # use Premium for geo replication
   admin_enabled       = false
   /*georeplications {
@@ -68,3 +91,4 @@ resource "azurerm_role_assignment" "aks" {
   scope                            = azurerm_container_registry.aks.id
   skip_service_principal_aad_check = true
 }
+

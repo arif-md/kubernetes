@@ -1,9 +1,9 @@
-variable "resource_group_name" {
+variable "aks_rg_name" {
   type        = string
   description = "RG name in Azure"
 }
 
-variable "location" {
+variable "aks_location" {
   type        = string
   description = "Resources location in Azure"
 }
@@ -36,6 +36,21 @@ variable "node_resource_group" {
 variable "acr_name" {
   type        = string
   description = "Name of the ACR"
+}
+
+variable "jenkins_vm_size" {
+  type        = string
+  description = "Size of Jenkins VM"
+}
+
+variable "jenkins_vm_location" {
+  type        = string
+  description = "Region of Jenkins VM"
+}
+
+variable "jenkins_rg_name" {
+  type        = string
+  description = "Resource group name of Jenkins VM"
 }
 
 /*variable "acr_geo_replicaton_location_1" {
