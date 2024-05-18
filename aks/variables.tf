@@ -58,6 +58,11 @@ variable "jenkins_rg_name" {
   description = "Resource group name of Jenkins VM"
 }
 
+variable "jenkins_setup_script" {
+  type        = string
+  description = "Name of the script that contains jenkins setup instructions"
+}
+
 /*variable "acr_geo_replicaton_location_1" {
   type        = string
   description = "Geo replication location - 1"

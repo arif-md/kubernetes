@@ -18,6 +18,7 @@ module "virtual_machine_jenkins" {
   subnet_internal = module.virtual_networks_jenkins.subnet_internal
   vm_size         = var.jenkins_vm_size
   prefix          = var.jenkins_rg_name  
+  init_script     = var.jenkins_setup_script
 }
 
 module "azurerm_kubernetes_cluster_1" {
