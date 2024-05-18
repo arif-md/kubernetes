@@ -38,6 +38,11 @@ variable "acr_name" {
   description = "Name of the ACR"
 }
 
+variable "acr_rg_name" {
+  type        = string
+  description = "Resource group name of the ACR"
+}
+
 variable "jenkins_vm_size" {
   type        = string
   description = "Size of Jenkins VM"
