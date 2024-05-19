@@ -19,6 +19,7 @@ module "virtual_machine_jenkins" {
   vm_size         = var.jenkins_vm_size
   prefix          = var.jenkins_rg_name  
   init_script     = var.jenkins_setup_script
+  assign_public_ip= true
 }
 
 module "azurerm_kubernetes_cluster_1" {
