@@ -22,6 +22,11 @@ module "virtual_machine_jenkins" {
   assign_public_ip= true
 }
 
+locals {
+  jenkins_public_ip = module.virtual_machine_jenkins.public_ip
+}
+
+
 module "azurerm_kubernetes_cluster_1" {
   source              = "../../azure/terraforms/modules/aks_cluster"
   location            = var.aks_location
@@ -44,4 +49,4 @@ module "azurerm_container_registry_1" {
   aks_principal_id = module.azurerm_kubernetes_cluster_1.aks_principal_id
   tag_billing_team = var.tag_billing_team
   tag_env = var.tag_env
-} 
+}
