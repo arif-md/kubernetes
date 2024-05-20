@@ -36,6 +36,13 @@ mv kubeconfig ~/.kube/config
 kubectl get nodes
 kubectl debug node/<node name from above command output> -it --image=<image name of the node, example ubuntu>
 
+# Test Jenkins installation
+# Copy the public IP address of the jenkins server printed in the console, if not found execute the command
+ssh devops@public_ip
+sudo service jenkins status (Wait for couple of mins until jenkins get installed)
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+http://public_ip:8080
+
 # delete the infra
 terraform destroy --auto-approve
 

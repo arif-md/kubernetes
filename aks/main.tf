@@ -1,3 +1,34 @@
+//destination_port_range : This specifies on which ports traffic will be allowed or denied by this rule
+//source_address_prefix  : It specifies the incoming traffic from a specific source IP address range that will be allowed or denied by this rule
+locals { 
+jenkins_nsgrules = {
+    ssh = {
+      name                       = "ssh"
+      priority                   = 100
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "22" 
+      source_address_prefix      = "*"
+      //destination_address_prefix = var.assign_public_ip ? azurerm_public_ip.MOD-VM[0].ip_address : null
+      destination_address_prefix = "*"
+    }
+    http = {
+      name                       = "http"
+      priority                   = 101
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "8080" 
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
+    }    
+  } 
+}
+
+
 module "resource_groups_jenkins" {
   source     = "../../azure/terraforms/modules/resource_group"
   name       = var.jenkins_rg_name 
@@ -12,15 +43,15 @@ module "virtual_networks_jenkins" {
 }
 
 module "virtual_machine_jenkins" {
-  source          = "../../azure/terraforms/modules/virtual_machine"
-  location        = var.jenkins_vm_location
-  rsg             = module.resource_groups_jenkins.rsg
-  subnet_internal = module.virtual_networks_jenkins.subnet_internal
-  vm_size         = var.jenkins_vm_size
-  prefix          = var.jenkins_rg_name  
-  init_script     = var.jenkins_setup_script
-  assign_public_ip= true
-  assign_nsg      = true
+  source           = "../../azure/terraforms/modules/virtual_machine"
+  location         = var.jenkins_vm_location
+  rsg              = module.resource_groups_jenkins.rsg
+  subnet_internal  = module.virtual_networks_jenkins.subnet_internal
+  vm_size          = var.jenkins_vm_size
+  prefix           = var.jenkins_rg_name  
+  init_script      = var.jenkins_setup_script
+  assign_public_ip = true
+  nsgrules         = local.jenkins_nsgrules
 }
 
 locals {
