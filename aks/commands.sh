@@ -41,6 +41,7 @@ kubectl debug node/<node name from above command output> -it --image=<image name
 ssh devops@public_ip
 sudo service jenkins status (Wait for couple of mins until jenkins get installed)
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+#Check the logs at : /var/log/cloud-init.log
 http://public_ip:8080
 
 # delete the infra
