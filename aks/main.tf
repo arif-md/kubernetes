@@ -11,8 +11,7 @@ jenkins_nsgrules = {
       source_port_range          = "*"
       destination_port_range     = "22" 
       source_address_prefix      = "*"
-      //destination_address_prefix = var.assign_public_ip ? azurerm_public_ip.MOD-VM[0].ip_address : null
-      destination_address_prefix = "*"
+      destination_address_prefix = "MAP_TO_VM_PVT_IP"
     }
     http = {
       name                       = "http"
