@@ -1,4 +1,0 @@
-<<CUSTOM_DATA
-#!/bin/bash
-echo "Execute your super awesome commands here!"
-CUSTOM_DATA

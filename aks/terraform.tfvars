@@ -1,7 +1,7 @@
 jenkins_vm_size                  = "Standard_DS1_v2"
 jenkins_vm_location              = "East US 2"
 jenkins_rg_name                  = "rsg-raptor-jenkins"
-jenkins_setup_script	         = "jenkins-setup-script.txt"
+jenkins_setup_script	         = "jenkins-setup-script.yaml"
 
 aks_rg_name                      = "rsg-raptor-aks"
 aks_location                     = "East US"
