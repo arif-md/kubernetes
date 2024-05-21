@@ -1,7 +1,14 @@
-//destination_port_range : This specifies on which ports traffic will be allowed or denied by this rule
-//source_address_prefix  : It specifies the incoming traffic from a specific source IP address range that will be allowed or denied by this rule
+resource "random_string" "random" {
+  length           = 5
+  numeric = true
+  special          = false
+  override_special = "/@$" # /@£$
+}
+
 locals { 
 jenkins_nsgrules = {
+    //destination_port_range : This specifies on which ports traffic will be allowed or denied by this rule
+    //source_address_prefix  : It specifies the incoming traffic from a specific source IP address range that will be allowed or denied by this rule
     ssh = {
       name                       = "ssh"
       priority                   = 100
@@ -25,8 +32,8 @@ jenkins_nsgrules = {
       destination_address_prefix = "*"
     }    
   } 
+  random_string = "${random_string.random.result}"
 }
-
 
 module "resource_groups_jenkins" {
   source     = "../../azure/terraforms/modules/resource_group"
@@ -35,22 +42,31 @@ module "resource_groups_jenkins" {
 }
 
 module "virtual_networks_jenkins" {
-  source     = "../../azure/terraforms/modules/virtual_network"
-  prefix     = var.jenkins_rg_name
-  location   = var.jenkins_vm_location
-  rsg        = module.resource_groups_jenkins.rsg
+  source         = "../../azure/terraforms/modules/virtual_network"
+  prefix         = var.jenkins_rg_name
+  location       = var.jenkins_vm_location
+  rsg            = module.resource_groups_jenkins.rsg
+  random_string  = local.random_string
 }
 
 module "virtual_machine_jenkins" {
-  source           = "../../azure/terraforms/modules/virtual_machine"
-  location         = var.jenkins_vm_location
-  rsg              = module.resource_groups_jenkins.rsg
-  subnet_internal  = module.virtual_networks_jenkins.subnet_internal
-  vm_size          = var.jenkins_vm_size
-  prefix           = var.jenkins_rg_name  
-  init_script      = var.jenkins_setup_script
-  assign_public_ip = true
-  nsgrules         = local.jenkins_nsgrules
+  source                          = "../../azure/terraforms/modules/virtual_machine"
+  rsg                             = module.resource_groups_jenkins.rsg
+  location                        = var.jenkins_vm_location
+  prefix                          = var.jenkins_rg_name  
+  subnet_internal                 = module.virtual_networks_jenkins.subnet_internal
+  vm_size                         = var.jenkins_vm_size
+  init_script                     = var.jenkins_setup_script
+  assign_public_ip                = true
+  nsgrules                        = local.jenkins_nsgrules
+  random_string                   = local.random_string
+  admin_username                  = var.jenkins_vm_admin_username
+  admin_password                  = var.jenkins_vm_admin_password
+  disable_password_authentication = var.jenkins_vm_disable_password_authentication
+  image_publisher                 = var.jenkins_vm_image_publisher
+  image_offer                     = var.jenkins_vm_image_offer
+  image_sku                       = var.jenkins_vm_image_sku
+  image_ver                       = var.jenkins_vm_image_ver
 }
 
 locals {

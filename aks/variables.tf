@@ -62,6 +62,28 @@ variable "jenkins_setup_script" {
   type        = string
   description = "Name of the script that contains jenkins setup instructions"
 }
+variable "jenkins_vm_disable_password_authentication" {
+  type    = bool  
+}
+variable "jenkins_vm_admin_username" {
+  type        = string
+}
+variable "jenkins_vm_admin_password" {
+  type        = string
+}
+variable "jenkins_vm_image_publisher" {
+  type        = string
+}
+variable "jenkins_vm_image_offer" {
+  type        = string
+}
+variable "jenkins_vm_image_ver" {
+  type        = string
+}
+variable "jenkins_vm_image_sku" {
+  type        = string
+}
+
 
 /*variable "acr_geo_replicaton_location_1" {
   type        = string
